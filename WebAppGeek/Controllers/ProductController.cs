@@ -31,5 +31,10 @@ namespace WebAppGeek.Controllers
                 return Ok(list);
             }
         }
+        [HttpDelete]
+        public ActionResult DeleteProduct(int id)
+        {
+            return Ok(0);
+        }
     }
 }
