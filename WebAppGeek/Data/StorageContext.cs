@@ -9,7 +9,7 @@ namespace WebAppGeek.Data
         public virtual DbSet<ProductGroup> ProductGroups { get; set; }
         public virtual DbSet<Storage> Storages { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer("Data Source =.\\SQLEXPRESS; Initial Catalog = Products; Trusted_Connection=True; TrustServerCertificate=True").UseLazyLoadingProxies().LogTo(Console.WriteLine);
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseSqlServer("Data Source =.\\SQLEXPRESS; Initial Catalog = Products; Trusted_Connection=True; TrustServerCertificate=True").LogTo(Console.WriteLine);//UseLazyLoadingProxies().
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

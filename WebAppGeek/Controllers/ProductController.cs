@@ -27,14 +27,25 @@ namespace WebAppGeek.Controllers
         {
             using(StorageContext storageContext = new StorageContext())
             {
-                var list = storageContext.Products.Select(p => new Product{Name = p.Name, Description = p.Description, Price = p.Price}).ToList();
+                //var list = storageContext.Products.Select(p => new Product{Name = p.Name, Description = p.Description, Price = p.Price}).ToList();
+                var list = storageContext.Products.ToList();
                 return Ok(list);
             }
         }
         [HttpDelete]
         public ActionResult DeleteProduct(int id)
         {
-            return Ok(0);
+            using (StorageContext storageContext = new StorageContext())
+            {
+                var product = storageContext.Products.FirstOrDefault(p => p.Id == id);
+                if (product != null)
+                {
+                    storageContext.Products.Remove(product);
+                    storageContext.SaveChanges();
+                    return Ok();
+                }
+                return StatusCode(404, "Нет продукта с таким ID");
+            }
         }
     }
 }

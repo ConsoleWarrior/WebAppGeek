@@ -7,7 +7,7 @@
         public decimal Price { get; set; }
         public string Description { get; set; }
         public int? ProductGroupId { get; set; }
-        public virtual List<Storage> Storages { get; set; }
-        public virtual ProductGroup? ProductGroup { get; set; }
+        public List<Storage> Storages { get; set; }
+        public ProductGroup? ProductGroup { get; set; }
     }
 }
