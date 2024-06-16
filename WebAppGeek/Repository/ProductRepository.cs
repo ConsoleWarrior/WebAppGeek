@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Caching.Memory;
+using System.Text;
 using WebAppGeek.Abstraction;
 using WebAppGeek.Data;
 using WebAppGeek.Dto;
@@ -34,6 +35,17 @@ namespace WebAppGeek.Repository
             listDto = storageContext.Products.Select(_mapper.Map<ProductDto>).ToList();
             _memoryCache.Set("products", listDto, TimeSpan.FromMinutes(30));
             return listDto;
+        }
+
+        public string GetProductsCSV()
+        {
+            StringBuilder sb = new StringBuilder();
+            var products = GetAllProducts();
+            foreach ( var product in products )
+            {
+                sb.AppendLine(product.Name+";"+product.Description+ ";"+product.Price+ ";"+product.ProductGroupId+ "\n");
+            }
+            return sb.ToString();
         }
     }
 }

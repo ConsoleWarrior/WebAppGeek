@@ -18,7 +18,7 @@ namespace WebAppGeek.Controllers
             _productRepository = productRepository;
         }
 
-        [HttpPost]
+        [HttpPost("add_product")]
         public ActionResult<int> AddProduct(ProductDto productDto)
         {
             try
@@ -30,28 +30,17 @@ namespace WebAppGeek.Controllers
             {
                 return StatusCode(409);
             }
-            //using (StorageContext storageContext = new StorageContext())
-            //{
-            //    if (storageContext.Products.Any(p => p.Name == name))
-            //        return StatusCode(409);
-
-            //    var product = new Product() { Name = name, Description = description, Price = price };
-            //    storageContext.Products.Add(product);
-            //    storageContext.SaveChanges();
-            //    return Ok(product.Id);
-
         }
         [HttpGet("get_all_products")]
         public ActionResult<IEnumerable<Product>> GetAllProducts()
         {
             return Ok(_productRepository.GetAllProducts());
-
-            //using(StorageContext storageContext = new StorageContext())
-            //{
-            //    //var list = storageContext.Products.Select(p => new Product{Name = p.Name, Description = p.Description, Price = p.Price}).ToList();
-            //    var list = storageContext.Products.ToList();
-            //    return Ok(list);
-            //}
+        }
+        [HttpGet("get_products_csv")]
+        public FileContentResult GetProductsCSV()
+        {
+            var content = _productRepository.GetProductsCSV();
+            return File(new System.Text.UTF8Encoding().GetBytes(content),"text/csv","report.csv");
         }
         //[HttpDelete]
         //public ActionResult DeleteProduct(int id)

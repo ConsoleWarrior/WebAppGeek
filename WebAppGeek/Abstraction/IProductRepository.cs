@@ -9,5 +9,6 @@ namespace WebAppGeek.Abstraction
         IEnumerable<ProductDto> GetAllProducts();
         int AddProduct(ProductDto productDto);
         void DeleteProduct(int id);
+        string GetProductsCSV();
     }
 }

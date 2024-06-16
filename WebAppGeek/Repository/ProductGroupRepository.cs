@@ -18,7 +18,7 @@ namespace WebAppGeek.Repository
         public int AddProductGroup(ProductGroupDto productGroupDto)
         {
             if (storageContext.ProductGroups.Any(p => p.Name == productGroupDto.Name))
-                throw new Exception("Уже есть продукт с таким именем");
+                throw new Exception("Уже есть группа с таким именем");
 
             var entity = _mapper.Map<ProductGroup>(productGroupDto);
             storageContext.ProductGroups.Add(entity);

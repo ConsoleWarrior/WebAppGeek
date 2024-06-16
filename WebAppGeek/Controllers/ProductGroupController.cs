@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAppGeek.Abstraction;
 using WebAppGeek.Data;
+using WebAppGeek.Dto;
 using WebAppGeek.Models;
+using WebAppGeek.Repository;
 
 namespace WebAppGeek.Controllers
 {
@@ -8,43 +11,44 @@ namespace WebAppGeek.Controllers
     [Route("[controller]")]
     public class ProductGroupController : ControllerBase
     {
-        [HttpPost]
-        public ActionResult<int> AddProductGroup(string name, string description)
-        {
-            using (StorageContext storageContext = new StorageContext())
-            {
-                if (storageContext.ProductGroups.Any(p => p.Name == name))
-                    return StatusCode(409);
+        private readonly IProductGroupRepository _productGroupRepository;
 
-                var productGroup = new ProductGroup() { Name = name, Description = description };
-                storageContext.ProductGroups.Add(productGroup);
-                storageContext.SaveChanges();
-                return Ok($"Добавлена группа с ID = {productGroup.Id}");
+        public ProductGroupController(IProductGroupRepository productGroupRepository)
+        {
+            _productGroupRepository = productGroupRepository;
+        }
+        [HttpPost]
+        public ActionResult<int> AddProductGroup(ProductGroupDto productGroupDto)
+        {
+            try
+            {
+                var id = _productGroupRepository.AddProductGroup(productGroupDto);
+                return Ok(id);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(409);
             }
         }
         [HttpGet]
         public ActionResult<IEnumerable<ProductGroup>> GetAllProductGroups()
         {
-            using (StorageContext storageContext = new StorageContext())
-            {
-                var list = storageContext.ProductGroups.ToList();
-                return Ok(list);
-            }
+            return Ok(_productGroupRepository.GetAllProductGroups());
         }
-        [HttpDelete]
-        public ActionResult DeleteProductGroup(int id)
-        {
-            using (StorageContext storageContext = new StorageContext())
-            {
-                var productGroup = storageContext.ProductGroups.FirstOrDefault(p => p.Id == id);
-                if (productGroup != null)
-                {
-                    storageContext.ProductGroups.Remove(productGroup);
-                    storageContext.SaveChanges();
-                    return Ok();
-                }
-                return StatusCode(404,"Нет группы с таким ID");
-            }
-        }
+        //[HttpDelete]
+        //public ActionResult DeleteProductGroup(int id)
+        //{
+        //    using (StorageContext storageContext = new StorageContext())
+        //    {
+        //        var productGroup = storageContext.ProductGroups.FirstOrDefault(p => p.Id == id);
+        //        if (productGroup != null)
+        //        {
+        //            storageContext.ProductGroups.Remove(productGroup);
+        //            storageContext.SaveChanges();
+        //            return Ok();
+        //        }
+        //        return StatusCode(404, "Нет группы с таким ID");
+        //    }
+        //}
     }
 }
